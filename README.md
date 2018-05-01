@@ -80,8 +80,6 @@ Multiple simulation was run to generate the data.
 2. Driving in reverse direction - Driving on the center of the road.
 3. Covering the edge case scenarios - Steering back the car from edge of the track. Quick steering away from objects near steep curvings of the road etc.
 
-For details about how I created the training data, see the next section. 
-
 ### Model Architecture and Training Strategy
 
 #### 1. Solution Design Approach
