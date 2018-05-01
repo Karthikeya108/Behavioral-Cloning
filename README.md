@@ -86,52 +86,55 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+The overall strategy for deriving a model architecture was to begin with a simple model and add the layers to the network to make it deep.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+1. A simple neural network with a single hidden layer trained on a single simulated drive data. When tested, the car would drive out of the track within few seconds.
+2. Simulated more data. Drove in reverse direction and covered edge case for instance driving into the center of the road when the car at the edge of the road. Collected drive data from steep curves.
+3. I split the data into the training and validation set in order to observe the performance and detect overfitting.
+4. Built a bigger network very similar to LeNet and trained the model on the data. 
+5. On testing, car would drive for a while but would drive away from the track or crash into something at the steep curves of the road.
+6. Added few more convolutional layers to the network.
+7. Trained the model for more epochs
+8. Added dropout layers to avoid overfitting and also loaded more edge case data of steering the car on to the center of the road.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road on track 1. 
 
-To combat the overfitting, I modified the model so that ...
-
-Then I ... 
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
-
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
+Next, I collected the data for track 2 and used the same model. It gave good results with approriate amount of training data. However, one problem I could not solve on track 2 was that the car would come to a halt (Speed 0) and would not start driving again.
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 31-46) consisted of a convolution neural network with the following layers:
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image1]
+| Layer         		|     Description	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| Input         		| 160x320x3 array   							| 
+| Convolution 5x5x6     	| 1x1 stride, valid padding 	|
+| RELU					|												|
+| Max pooling	      	| 2x2 pool size				|
+| Convolution 5x5x16	    | 1x1 stride,  valid padding      									|
+| RELU					|												|
+| Max pooling	      	| 2x2 pool size				|
+| Convolution 5x5x16	    | 1x1 stride,  valid padding      									|
+| RELU					|												|
+| Max pooling	      	| 2x2 pool size				|
+| Convolution 5x5x16	    | 1x1 stride,  valid padding      									|
+| RELU					|												|
+| Max pooling	      	| 2x2 pool size				|
+| Flatten         |  
+| Dropout         | drop rate 0.4       |
+| Fully connected (Dense)		| outputs 120        									|
+| Dropout         | drop rate 0.2       |
+| Fully connected (Dense)		| outputs 84        									|
+| Fully connected (Dense)		| outputs 1        									|
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+1. Normal driving - Driving on the center of the road - multiple laps.
+2. Driving in reverse direction - Driving on the center of the road.
+3. Covering the edge case scenarios - Steering back the car from edge of the track. Quick steering away from objects near steep curvings of the road etc.
 
-![alt text][image2]
+I normalized the image data before feeding it to the network.
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+I finally randomly shuffled the data set and put 10% of the data into a validation and test sets. 
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
-
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 20. I used an adam optimizer so that manually training the learning rate wasn't necessary.
