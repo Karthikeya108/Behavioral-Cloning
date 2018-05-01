@@ -1,4 +1,4 @@
-**Behavioral Cloning Project**
+### Behavioral Cloning Project
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
@@ -8,7 +8,6 @@ The goals / steps of this project are the following:
 * Summarize the results with a written report
 
 ---
-### Files Submitted & Code Quality
 
 #### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
 
@@ -128,8 +127,16 @@ The final model architecture (model.py lines 31-46) consisted of a convolution n
 #### 3. Creation of the Training Set & Training Process
 
 1. Normal driving - Driving on the center of the road - multiple laps.
+
+<img src="./images/1.jpg" height="300" width="450">
+
 2. Driving in reverse direction - Driving on the center of the road.
+
+<img src="./images/3.jpg" height="300" width="450">
+
 3. Covering the edge case scenarios - Steering back the car from edge of the track. Quick steering away from objects near steep curvings of the road etc.
+
+<img src="./images/2.jpg" height="300" width="450">
 
 I normalized the image data before feeding it to the network.
 
