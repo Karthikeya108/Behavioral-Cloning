@@ -12,6 +12,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 
+#Define parameters
 NB_EPOCH = 20
 BATCH_SIZE = 128
 VERBOSE = 1
@@ -23,6 +24,7 @@ NB_CHANNELS = 3
 NB_CLASSES = 1
 INPUT_SHAPE = (IMG_ROWS, IMG_COLS, NB_CHANNELS)
 
+#Define the model class
 class PSAModel:
     @staticmethod
     def build(input_shape, classes):
@@ -69,31 +71,36 @@ def generator(samples, batch_size=32):
                 images.append(np.array(center_image))
                 angles.append(center_angle)
 
-            # trim image to only see section with road
             X_train = np.array(images)
             y_train = np.array(angles)
             yield shuffle(X_train, y_train)
 
 def main():
     samples = []
+    #Load data from multiple simulations
     load_data(samples, '../data/driving_log.csv')
     load_data(samples, '../data/driving_log1.csv')
     load_data(samples, '../data/driving_log2.csv')
 
+    #Load data from Edge Case simulations multiple times
     load_data(samples, '../data/driving_log4.csv')
     load_data(samples, '../data/driving_log4.csv')
     load_data(samples, '../data/driving_log4.csv')
 
+    #Load data from Edge Case simulations multiple times
     load_data(samples, '../data/driving_log5.csv')
     load_data(samples, '../data/driving_log5.csv')
     load_data(samples, '../data/driving_log5.csv')
 
+    #Split samples into Training and Testing
     train_val_samples, test_samples = train_test_split(samples, test_size=0.1)
+    #Split samples into Training and Validation
     train_samples, validation_samples = train_test_split(train_val_samples, test_size=0.1)
     
     train_generator = generator(train_samples, batch_size=BATCH_SIZE)
     validation_generator = generator(validation_samples, batch_size=BATCH_SIZE)
     
+    #Build, compile and train the model
     model = PSAModel.build(INPUT_SHAPE, NB_CLASSES)
     model.compile(loss=LOSS, optimizer=OPTIMIZER)
     model.fit_generator(train_generator, steps_per_epoch=len(train_samples)/BATCH_SIZE, 
@@ -102,6 +109,7 @@ def main():
 
     model.save('model-PSAModel-track-1a.h5')
     
+    #Evaluate the model
     test_generator = generator(test_samples, batch_size=BATCH_SIZE)
     model.evaluate_generator(test_generator, steps=len(test_samples)/BATCH_SIZE)
     test_loss = model.evaluate_generator(test_generator, steps=len(test_samples)/BATCH_SIZE)
